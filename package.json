@@ -1,0 +1,35 @@
+{
+  "name": "gadgets",
+  "version": "1.0.0",
+  "description": "MERN shopping cart app",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import" :"node server/seeder",
+    "data:destroy" :"node server/seeder -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vasu7389/gadgets.git"
+  },
+  "author": "Vasu Awasthi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vasu7389/gadgets/issues"
+  },
+  "homepage": "https://github.com/Vasu7389/gadgets#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.13"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.0",
+    "nodemon": "^2.0.7"
+  }
+}
