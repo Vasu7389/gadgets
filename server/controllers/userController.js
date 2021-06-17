@@ -35,6 +35,8 @@ const registerUser = async (req, res) => {
   } catch (error) {
     //throw new Error("Invalid email or password");
     //handle
+    res.status(400);
+    res.json({ message: "Invalid user data" });
   }
 };
 
@@ -63,6 +65,8 @@ const authUser = async (req, res) => {
   } catch (error) {
     //throw new Error("Invalid email or password");
     //handle
+    res.status(400);
+    res.json({ message: "Invalid email or password" });
   }
 };
 
@@ -89,4 +93,33 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-export { authUser, getUserProfile, registerUser };
+//@desc UPDATE user profile
+//@routes PUT /api/user/profile
+//@access Private
+const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id); //await is mendate for all the DB calls
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+      const updatedUser = await user.save();
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      });
+    } else {
+      res.status(404); //404 - user not found!
+      res.json({ message: "User not found" });
+    }
+  } catch (error) {
+    //throw new Error(""User not found"");
+    //handle
+  }
+};
+
+export { authUser, getUserProfile, registerUser, updateUserProfile };

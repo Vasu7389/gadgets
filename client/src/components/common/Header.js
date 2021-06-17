@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { connect } from "react-redux";
+import { logout } from "../../actions/userActions";
 
-const Header = () => {
+const Header = ({ user, logout }) => {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    setUserName(user.userInfo);
+  }, [user]);
+
+  const onClickLogout = () => logout();
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -19,12 +29,22 @@ const Header = () => {
                   Cart
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/login">
-                <Nav.Link>
-                  <i className="fas fa-user" />
-                  Sign In
-                </Nav.Link>
-              </LinkContainer>
+              {userName ? (
+                <NavDropdown title={userName.name} id="username">
+                  <LinkContainer to="/profile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={onClickLogout}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <i className="fas fa-user"></i> Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -33,4 +53,10 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userLogin,
+  };
+};
+
+export default connect(mapStateToProps, { logout })(Header);
