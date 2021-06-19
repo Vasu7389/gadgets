@@ -15,7 +15,7 @@ const LoginScreen = ({ userLogin, login, location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      history.push(redirect);
+      history.push(redirect[1]);
     }
   }, [history, userInfo, redirect]);
 
@@ -23,6 +23,7 @@ const LoginScreen = ({ userLogin, login, location, history }) => {
     e.preventDefault();
     login(email, password);
   };
+
   return (
     <FormContainer>
       <h1>Sign In</h1>
@@ -54,7 +55,9 @@ const LoginScreen = ({ userLogin, login, location, history }) => {
       <Row className="py-3">
         <Col>
           New Customer?{" "}
-          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
+          <Link
+            to={redirect ? `/register?redirect=${redirect[1]}` : "/register"}
+          >
             Register
           </Link>
         </Col>

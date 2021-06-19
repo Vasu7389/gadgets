@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import Message from "../components/common/Message";
@@ -12,7 +11,6 @@ const ProfileScreen = ({
   getUserDetails,
   updateUserProfile, //action, naming convention?
   userUpdatedProfile, //state after update
-  location,
   history,
 }) => {
   const { loading, error, user } = userDetails;

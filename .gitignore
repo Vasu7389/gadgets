@@ -9,6 +9,9 @@ node_modules/
 # testing
 /coverage
 
+# debugging
+.vscode
+
 # production
 /build
 

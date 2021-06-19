@@ -18,7 +18,7 @@ const RegisterScreen = ({ userRegister, register, location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      history.push(redirect);
+      history.push(redirect[1]);
     }
   }, [history, userInfo, redirect]);
 
@@ -80,7 +80,7 @@ const RegisterScreen = ({ userRegister, register, location, history }) => {
       <Row className="py-3">
         <Col>
           Have an account?{" "}
-          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+          <Link to={redirect ? `/login?redirect=${redirect[1]}` : "/login"}>
             Login
           </Link>
         </Col>

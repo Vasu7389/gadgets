@@ -37,7 +37,6 @@ function RatingStars({ value = 0, text }) {
 }
 
 RatingStars.propTypes = {
-  value: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
   color: PropTypes.string,
 };

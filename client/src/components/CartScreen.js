@@ -27,7 +27,7 @@ const CartScreen = ({
     if (productId) {
       addToCart(productId, qty);
     }
-  }, []);
+  }, [addToCart, productId, qty]);
 
   const onRemoveFromCart = (id) => {
     removeFromCart(id);
@@ -102,7 +102,7 @@ const CartScreen = ({
               <Button
                 type="button"
                 className="btn-block"
-                disable={cartItems.length === 0}
+                disable={(cartItems.length === 0).toString()}
                 onClick={onCheckout}
               >
                 Proceed To Checkout
