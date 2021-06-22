@@ -14,7 +14,7 @@ import {
   USER_UPDATE_PROFILE_FAIL,
 } from "../constants/userConstants";
 
-export const userLoginReducers = (state = {}, action) => {
+export const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
       return { loading: true };
@@ -29,7 +29,7 @@ export const userLoginReducers = (state = {}, action) => {
   }
 };
 
-export const userRegisterReducers = (state = {}, action) => {
+export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_REGISTER_REQUEST:
       return { loading: true };
@@ -42,7 +42,7 @@ export const userRegisterReducers = (state = {}, action) => {
   }
 };
 
-export const userDetailsReducers = (state = { user: {} }, action) => {
+export const userDetailsReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case USER_DETAILS_REQUEST:
       return { ...state, loading: true };
@@ -55,7 +55,7 @@ export const userDetailsReducers = (state = { user: {} }, action) => {
   }
 };
 
-export const userUpdateProfileReducers = (state = { user: {} }, action) => {
+export const userUpdateProfileReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case USER_UPDATE_PROFILE_REQUEST:
       return { loading: true };

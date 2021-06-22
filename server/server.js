@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 //have to add .js with our files with ES6 modules and type:'modules' in package.json
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import { errorHandle, notFound } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -19,7 +20,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productRoutes); //to link product related routes from other file
-app.use("/api/user", userRoutes); //to link product related routes from other file
+app.use("/api/user", userRoutes); //to link user related routes from other file
+app.use("/api/orders", orderRoutes); //to link order related routes from other file
 
 app.use(notFound);
 
