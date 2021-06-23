@@ -36,6 +36,32 @@ const addOrderItems = async (req, res) => {
   }
 };
 
+//@desc Update order to paid
+//@routes GET /api/orders/:id/pay
+//@access Private
+const updateOrderToPaid = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.paymentMethod = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.payer.email_address,
+      };
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404);
+      res.json({ message: "Order update failed" });
+    }
+  } catch (error) {
+    //handle
+  }
+};
+
 //@desc Get order by id
 //@routes GET /api/orders/:id
 //@access Private
@@ -56,4 +82,4 @@ const getOrderById = async (req, res) => {
   }
 };
 
-export { addOrderItems, getOrderById };
+export { addOrderItems, getOrderById, updateOrderToPaid };

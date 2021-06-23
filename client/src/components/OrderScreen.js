@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import Loader from "./common/Loader";
 import Message from "./common/Message";
@@ -11,9 +11,20 @@ const OrderScreen = ({ match, getOrderDetails, orderDetails, history }) => {
   const { order, loading, error } = orderDetails;
   const orderId = match.params.id;
 
+  if (!loading && order) {
+    //calculate price
+    const addDecimal = (num) => {
+      return (Math.round(num * 100) / 100).toFixed(2);
+    };
+
+    order.itemsPrice = addDecimal(
+      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    );
+  }
+
   useEffect(() => {
     getOrderDetails(orderId);
-  }, []);
+  }, [getOrderDetails, orderId]);
 
   return loading ? (
     <Loader />
@@ -28,16 +39,37 @@ const OrderScreen = ({ match, getOrderDetails, orderDetails, history }) => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Address:</strong>
+                <strong>Name: </strong> {order.user.name}
+              </p>
+              <p>
+                <strong>Email: </strong>
+                <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
+              </p>
+              <p>
+                <strong>Address: </strong>
                 {order.shippingAddress.address},{order.shippingAddress.city},
                 {order.shippingAddress.postalCode},
                 {order.shippingAddress.Country}
               </p>
+              {order.isDelivered ? (
+                <Message variant="success">
+                  Delivered on {order.deliveredAt}
+                </Message>
+              ) : (
+                <Message variant="danger">Not Delivered</Message>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <h2>Payment Method</h2>
-              <strong>Method: </strong>
-              {order.paymentMethod}
+              <p>
+                <strong>Method: </strong>
+                {order.paymentMethod}
+              </p>
+              {order.isPaid ? (
+                <Message variant="success">Paid on {order.paidAt}</Message>
+              ) : (
+                <Message variant="danger">Not Paid</Message>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <h2>Order Items</h2>
