@@ -45,12 +45,7 @@ const updateOrderToPaid = async (req, res) => {
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
-      order.paymentMethod = {
-        id: req.body.id,
-        status: req.body.status,
-        update_time: req.body.update_time,
-        email_address: req.body.payer.email_address,
-      };
+      order.paymentResult = req.body.paymentMethodData;
       const updatedOrder = await order.save();
       res.json(updatedOrder);
     } else {

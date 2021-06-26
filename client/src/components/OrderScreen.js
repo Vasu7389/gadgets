@@ -4,11 +4,19 @@ import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import Loader from "./common/Loader";
 import Message from "./common/Message";
-import { getOrderDetails } from "../actions/orderActions";
+import { getOrderDetails, orderPayResetAction } from "../actions/orderActions";
+import GPayButton from "./common/GPayButton";
 
-const OrderScreen = ({ match, getOrderDetails, orderDetails, history }) => {
+const OrderScreen = ({
+  match,
+  getOrderDetails,
+  orderDetails,
+  orderPay,
+  orderPayResetAction,
+}) => {
   //After click place order button we will get below details
   const { order, loading, error } = orderDetails;
+  const { loading: loadingPay, success: successPay } = orderPay;
   const orderId = match.params.id;
 
   if (!loading && order) {
@@ -23,8 +31,11 @@ const OrderScreen = ({ match, getOrderDetails, orderDetails, history }) => {
   }
 
   useEffect(() => {
-    getOrderDetails(orderId);
-  }, [getOrderDetails, orderId]);
+    if (!order || successPay) {
+      orderPayResetAction();
+      getOrderDetails(orderId);
+    }
+  }, [order, getOrderDetails, orderId, successPay, orderPayResetAction]);
 
   return loading ? (
     <Loader />
@@ -134,10 +145,15 @@ const OrderScreen = ({ match, getOrderDetails, orderDetails, history }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {error && (
+                <ListGroup.Item>
+                  {" "}
+                  <Message variant="danger">{error}</Message>{" "}
+                </ListGroup.Item>
+              )}
               <ListGroup.Item>
-                {error && <Message variant="danger">{error}</Message>}
+                {loadingPay ? <Loader /> : <GPayButton orderId={orderId} />}
               </ListGroup.Item>
-              <ListGroup.Item></ListGroup.Item>
             </ListGroup>
           </Card>
         </Col>
@@ -150,9 +166,11 @@ const mapStateToProps = (state) => {
   return {
     cart: state.cart,
     orderDetails: state.orderDetails,
+    orderPay: state.orderPay,
   };
 };
 
-export default connect(mapStateToProps, { getOrderDetails: getOrderDetails })(
-  OrderScreen
-);
+export default connect(mapStateToProps, {
+  getOrderDetails: getOrderDetails,
+  orderPayResetAction,
+})(OrderScreen);

@@ -80,8 +80,8 @@ export const payOrder =
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.PUT(
-        `/api/orders/${orderId}/PAY`,
+      const { data } = await axios.put(
+        `/api/orders/${orderId}/pay`,
         paymentResult,
         config
       );
@@ -97,3 +97,7 @@ export const payOrder =
       });
     }
   };
+
+export const orderPayResetAction = () => (dispatch) => {
+  dispatch({ type: ORDER_PAY_RESET });
+};

@@ -10,7 +10,7 @@ const PaymentScreen = ({ history, savePaymentMethod, shippingAddress }) => {
     history.push("/shipping");
   }
 
-  const [paymentMethod, setPaymentMethod] = useState("PayPal");
+  const [paymentMethod, setPaymentMethod] = useState("GPay");
 
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -28,10 +28,10 @@ const PaymentScreen = ({ history, savePaymentMethod, shippingAddress }) => {
           <Col className="py-3">
             <Form.Check
               type="radio"
-              label="PayPal or Credit Card"
-              id="PayPal"
+              label="GPay or Credit Card"
+              id="GPay"
               name="paymentMethod"
-              value="PayPal"
+              value="GPay"
               checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
