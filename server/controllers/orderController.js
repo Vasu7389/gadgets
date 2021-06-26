@@ -77,4 +77,16 @@ const getOrderById = async (req, res) => {
   }
 };
 
-export { addOrderItems, getOrderById, updateOrderToPaid };
+//@desc Get loggedin user orders
+//@routes GET /api/orders/myorders
+//@access Private
+const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id });
+    res.json(orders);
+  } catch (error) {
+    //handle
+  }
+};
+
+export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };

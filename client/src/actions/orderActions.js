@@ -10,6 +10,9 @@ import {
   ORDER_PAY_SUCCESS,
   ORDER_PAY_FAIL,
   ORDER_PAY_RESET,
+  ORDER_MY_LIST_REQUEST,
+  ORDER_MY_LIST_SUCCESS,
+  ORDER_MY_LIST_FAIL,
 } from "../constants/orderConstants";
 
 export const createOrder = (order) => async (dispatch, getState) => {
@@ -76,7 +79,7 @@ export const payOrder =
 
       const config = {
         headers: {
-          "Content-Type": "application/json", //why this needed
+          "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
@@ -100,4 +103,28 @@ export const payOrder =
 
 export const orderPayResetAction = () => (dispatch) => {
   dispatch({ type: ORDER_PAY_RESET });
+};
+
+export const myOrdersAction = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ORDER_MY_LIST_REQUEST });
+    const currentUser = getState().userLogin.userInfo;
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/orders/myorders`, config);
+
+    dispatch({ type: ORDER_MY_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: ORDER_MY_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message, //data.message is coming from server
+    });
+  }
 };

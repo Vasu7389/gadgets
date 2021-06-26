@@ -35,6 +35,9 @@ const OrderScreen = ({
       orderPayResetAction();
       getOrderDetails(orderId);
     }
+    if (order && order._id !== orderId) {
+      getOrderDetails(orderId);
+    }
   }, [order, getOrderDetails, orderId, successPay, orderPayResetAction]);
 
   return loading ? (

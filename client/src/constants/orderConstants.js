@@ -10,3 +10,8 @@ export const ORDER_PAY_REQUEST = "ORDER_PAY_REQUEST";
 export const ORDER_PAY_SUCCESS = "ORDER_PAY_SUCCESS";
 export const ORDER_PAY_FAIL = "ORDER_PAY_FAIL";
 export const ORDER_PAY_RESET = "ORDER_PAY_RESET";
+
+//get order list for current user
+export const ORDER_MY_LIST_REQUEST = "ORDER_MY_LIST_REQUEST";
+export const ORDER_MY_LIST_SUCCESS = "ORDER_MY_LIST_SUCCESS";
+export const ORDER_MY_LIST_FAIL = "ORDER_MY_LIST_FAIL";

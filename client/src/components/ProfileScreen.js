@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Table } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { connect } from "react-redux";
 import Message from "../components/common/Message";
 import Loader from "../components/common/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
+import { myOrdersAction } from "../actions/orderActions";
 
 const ProfileScreen = ({
   userDetails,
@@ -11,11 +13,14 @@ const ProfileScreen = ({
   getUserDetails,
   updateUserProfile, //action, naming convention?
   userUpdatedProfile, //state after update
+  myOrdersAction, //fetches current user orders
+  myOrders, //current user order list from myOrdersAction
   history,
 }) => {
   const { loading, error, user } = userDetails;
   const { userInfo } = userLogin;
   const { success } = userUpdatedProfile;
+  const { loading: loadingOrders, myOrderList, error: errorOrders } = myOrders;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +32,7 @@ const ProfileScreen = ({
     if (!userInfo) {
       history.push("/login");
     } else {
+      myOrdersAction();
       if (!user.name) {
         getUserDetails("profile");
       } else {
@@ -34,7 +40,7 @@ const ProfileScreen = ({
         setEmail(user.email);
       }
     }
-  }, [getUserDetails, userInfo, user, history]);
+  }, [getUserDetails, userInfo, user, history, myOrdersAction]);
 
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -101,6 +107,54 @@ const ProfileScreen = ({
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
+        {loadingOrders ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant="danger">{errorOrders}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {myOrderList.map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <i className="fas fa-times" style={{ color: "red" }} />
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <i className="fas fa-times" style={{ color: "red" }} />
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/order/${order._id}`}>
+                      <Button className="btn-sm" variant="light">
+                        Details
+                      </Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   );
@@ -111,9 +165,12 @@ const mapStateToProps = (state) => {
     userDetails: state.userDetails,
     userLogin: state.userLogin,
     userUpdatedProfile: state.userUpdateProfile,
+    myOrders: state.myOrders,
   };
 };
 
-export default connect(mapStateToProps, { getUserDetails, updateUserProfile })(
-  ProfileScreen
-); //can use ES6 {login}
+export default connect(mapStateToProps, {
+  getUserDetails,
+  updateUserProfile,
+  myOrdersAction,
+})(ProfileScreen); //can use ES6 {login}

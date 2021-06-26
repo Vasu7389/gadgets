@@ -4,13 +4,15 @@ import {
   addOrderItems,
   getOrderById,
   updateOrderToPaid,
+  getMyOrders,
 } from "../controllers/orderController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 //diff between router.post vs router.route.post/get
 
-router.route("/").post(protect, addOrderItems); //this is a controller method call if this route hit for GET or PUT
-router.route("/:id").get(protect, getOrderById); //this is a controller method call if this route hit for GET or PUT
-router.route("/:id/pay").put(protect, updateOrderToPaid); //this is a controller method call if this route hit for GET or PUT
+router.route("/").post(protect, addOrderItems);
+router.route("/myorders").get(protect, getMyOrders);
+router.route("/:id").get(protect, getOrderById);
+router.route("/:id/pay").put(protect, updateOrderToPaid);
 
 export default router;
