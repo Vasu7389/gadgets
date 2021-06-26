@@ -122,4 +122,91 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-export { authUser, getUserProfile, registerUser, updateUserProfile };
+//@desc UPDATE user
+//@routes PUT /api/user/:id
+//@access Private/Admin
+const updateUserForAdmin = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id); //await is mendate for all the DB calls
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.isAdmin = req.body.isAdmin;
+
+      const updatedUser = await user.save();
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      });
+    } else {
+      res.status(404); //404 - user not found!
+      res.json({ message: "User not found" });
+    }
+  } catch (error) {
+    //throw new Error(""User not found"");
+    //handle
+  }
+};
+
+//@desc GET all users
+//@routes POST /api/user
+//@access Private/Admin
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    //throw new Error(""User not found"");
+    //handle
+  }
+};
+
+//@desc Get user by id
+//@routes GET /api/user/:id
+//@access Private/Admin
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password"); //dont want to fetch the password to send response
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404);
+      res.json({ message: "User not found" });
+    }
+  } catch (error) {
+    //throw new Error(""User not found"");
+    //handle
+  }
+};
+
+//@desc Delete a user
+//@routes DELETE /api/user/:id
+//@access Private/Admin
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      await user.remove();
+      res.json({ message: "User removed" });
+    } else {
+      res.status(404);
+      res.json({ message: "User not found" });
+    }
+  } catch (error) {
+    //throw new Error(""User not found"");
+    //handle
+  }
+};
+
+export {
+  authUser,
+  getUserProfile,
+  registerUser,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUserForAdmin,
+};
