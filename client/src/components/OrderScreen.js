@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import Loader from "./common/Loader";
 import Message from "./common/Message";
-import { getOrderDetails, orderPayResetAction } from "../actions/orderActions";
+import {
+  getOrderDetails,
+  orderPayResetAction,
+  orderDeliverResetAction,
+  deliverOrderAction,
+} from "../actions/orderActions";
 import GPayButton from "./common/GPayButton";
 
 const OrderScreen = ({
@@ -13,10 +18,15 @@ const OrderScreen = ({
   orderDetails,
   orderPay,
   orderPayResetAction,
+  deliverOrderAction,
+  orderDeliver,
+  userInfo,
+  history,
 }) => {
   //After click place order button we will get below details
   const { order, loading, error } = orderDetails;
   const { loading: loadingPay, success: successPay } = orderPay;
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
   const orderId = match.params.id;
 
   if (!loading && order) {
@@ -31,14 +41,34 @@ const OrderScreen = ({
   }
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
+    if (successDeliver) {
+      history.push("/admin/orderlist");
+    }
     if (!order || successPay) {
       orderPayResetAction();
+      orderDeliverResetAction();
       getOrderDetails(orderId);
     }
     if (order && order._id !== orderId) {
       getOrderDetails(orderId);
     }
-  }, [order, getOrderDetails, orderId, successPay, orderPayResetAction]);
+  }, [
+    order,
+    getOrderDetails,
+    orderId,
+    successPay,
+    orderPayResetAction,
+    successDeliver,
+    history,
+    userInfo,
+  ]);
+
+  const deliverHandler = () => {
+    deliverOrderAction(order);
+  };
 
   return loading ? (
     <Loader />
@@ -154,9 +184,23 @@ const OrderScreen = ({
                   <Message variant="danger">{error}</Message>{" "}
                 </ListGroup.Item>
               )}
-              <ListGroup.Item>
-                {loadingPay ? <Loader /> : <GPayButton orderId={orderId} />}
-              </ListGroup.Item>
+              {!userInfo?.isAdmin && (
+                <ListGroup.Item>
+                  {loadingPay ? <Loader /> : <GPayButton orderId={orderId} />}
+                </ListGroup.Item>
+              )}
+              {loadingDeliver && <Loader />}
+              {userInfo?.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={deliverHandler}
+                  >
+                    Mark as Delivered
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
@@ -170,10 +214,14 @@ const mapStateToProps = (state) => {
     cart: state.cart,
     orderDetails: state.orderDetails,
     orderPay: state.orderPay,
+    orderDeliver: state.orderDeliver,
+    userInfo: state.userLogin.userInfo,
   };
 };
 
 export default connect(mapStateToProps, {
   getOrderDetails: getOrderDetails,
   orderPayResetAction,
+  orderDeliverResetAction,
+  deliverOrderAction,
 })(OrderScreen);

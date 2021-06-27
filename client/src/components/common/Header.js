@@ -16,11 +16,11 @@ const Header = ({ user, logout }) => {
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container>
+        <Container style={{ display: "flex", justifyContent: "space-between" }}>
           <LinkContainer to="/">
             <Navbar.Brand>Gadgets</Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav"></Navbar.Toggle>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <LinkContainer to="/cart">

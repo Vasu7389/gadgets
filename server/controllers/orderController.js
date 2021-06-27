@@ -37,7 +37,7 @@ const addOrderItems = async (req, res) => {
 };
 
 //@desc Update order to paid
-//@routes GET /api/orders/:id/pay
+//@routes PUT /api/orders/:id/pay
 //@access Private
 const updateOrderToPaid = async (req, res) => {
   try {
@@ -46,6 +46,26 @@ const updateOrderToPaid = async (req, res) => {
       order.isPaid = true;
       order.paidAt = Date.now();
       order.paymentResult = req.body.paymentMethodData;
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404);
+      res.json({ message: "Order update failed" });
+    }
+  } catch (error) {
+    //handle
+  }
+};
+
+//@desc Update order to delivered
+//@routes PUT /api/orders/:id/deliver
+//@access Private/Admin
+const updateOrderToDelivered = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
       const updatedOrder = await order.save();
       res.json(updatedOrder);
     } else {
@@ -89,4 +109,23 @@ const getMyOrders = async (req, res) => {
   }
 };
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
+//@desc Get all orders
+//@routes GET /api/orders
+//@access Private/Admin
+const getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate("user", "id name");
+    res.json(orders);
+  } catch (error) {
+    //handle
+  }
+};
+
+export {
+  addOrderItems,
+  getOrderById,
+  updateOrderToPaid,
+  updateOrderToDelivered,
+  getMyOrders,
+  getOrders,
+};

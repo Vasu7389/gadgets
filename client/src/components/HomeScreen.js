@@ -6,21 +6,21 @@ import Loader from "./common/Loader";
 import { listProducts } from "../actions/productActions";
 import { connect } from "react-redux";
 
-const HomeScreen = (props) => {
+const HomeScreen = ({ listProducts, error, loading, products }) => {
   useEffect(() => {
-    props.listProducts();
-  }, []);
+    listProducts();
+  }, [listProducts]);
 
   return (
     <>
       <h1>Latest Products</h1>
-      {props.loading ? (
+      {loading ? (
         <Loader />
-      ) : props.error ? (
-        <Message variant="danger">{props.error}</Message>
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
       ) : (
         <Row>
-          {props.products.map((product) => (
+          {products.map((product) => (
             <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
               <ProductCard product={product} />
             </Col>
