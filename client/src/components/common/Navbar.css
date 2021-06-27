@@ -1,0 +1,69 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  padding: 0 250px;
+  align-items: center;
+  color: rgb(36, 36, 36);
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.navbar__appName > a {
+  font-size: 1.8rem;
+  text-transform: lowercase;
+  font-weight: 700;
+}
+
+.navbar__options {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: none;
+}
+
+.navbar__toggleIcon {
+  display: none;
+}
+
+.sideMargin {
+  margin: 15px 15px;
+}
+
+/*Mobile View*/
+@media only screen and (max-width: 1400px) {
+  .navbar__options {
+    display: none;
+  }
+  .navbar__toggleIcon {
+    display: block;
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+  .navbar {
+    padding: 0 60px;
+  }
+}
+
+.navbar__optionsMobileView {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  left: 0;
+  top: 70px;
+  width: 100%;
+  z-index: 1;
+  height: 70vh;
+  box-shadow: rgba(100, 100, 100, 0.2) 0px 20px 29px 0px;
+  font-size: 1.2rem;
+}
+
+.menuOptionHide {
+  display: none;
+}

@@ -187,6 +187,10 @@ const OrderScreen = ({
               {!userInfo?.isAdmin && (
                 <ListGroup.Item>
                   {loadingPay ? <Loader /> : <GPayButton orderId={orderId} />}
+                  <p>
+                    *Its a TEST intergation of Google Pay, money will not be
+                    deducted.
+                  </p>
                 </ListGroup.Item>
               )}
               {loadingDeliver && <Loader />}

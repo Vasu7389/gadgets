@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./bootstrap.min.css";
 import { Container } from "react-bootstrap";
-import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import HomeScreen from "./components/HomeScreen";
 import ProductDetail from "./components/ProductDetail";
@@ -19,11 +18,12 @@ import UserEditScreen from "./components/UserEditScreen";
 import ProductListScreen from "./components/ProductListScreen";
 import ProductEditScreen from "./components/ProductEditScreen";
 import OrderListScreen from "./components/OrderListScreen";
+import Navbar from "./components/common/Navbar";
 
 function App() {
   return (
     <Router>
-      <Header />
+      <Navbar />
       <main className="py-3">
         <Container>
           <Route path="/shipping" component={ShippingScreen} />

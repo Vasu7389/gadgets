@@ -15,7 +15,11 @@ const LoginScreen = ({ userLogin, login, location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      history.push(redirect[1]);
+      if (redirect[1]) {
+        history.push(redirect[1]);
+      } else {
+        history.push("/");
+      }
     }
   }, [history, userInfo, redirect]);
 
@@ -56,7 +60,11 @@ const LoginScreen = ({ userLogin, login, location, history }) => {
         <Col>
           New Customer?{" "}
           <Link
-            to={redirect ? `/register?redirect=${redirect[1]}` : "/register"}
+            to={
+              redirect[1] !== undefined
+                ? `/register?redirect=${redirect[1]}`
+                : "/register"
+            }
           >
             Register
           </Link>

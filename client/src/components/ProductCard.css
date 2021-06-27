@@ -1,0 +1,13 @@
+.productCard__container {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 10px;
+  margin: 3px;
+  background-color: white;
+}
+
+.productCard__image {
+  border-radius: 10px;
+}
+.productCard__Body {
+  margin: 10px;
+}

@@ -16,7 +16,7 @@ const Header = ({ user, logout }) => {
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container style={{ display: "flex", justifyContent: "space-between" }}>
+        <Container>
           <LinkContainer to="/">
             <Navbar.Brand>Gadgets</Navbar.Brand>
           </LinkContainer>
